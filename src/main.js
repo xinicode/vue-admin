@@ -8,5 +8,4 @@ import locale from 'element-plus/lib/locale/lang/zh-cn';
 
 
 
-
 createApp(App).use(store).use(router).use(ElementPlus, {locale}).mount("#app");

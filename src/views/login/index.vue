@@ -29,7 +29,12 @@
           <el-input type="password" v-model="form.password"></el-input>
         </el-form-item>
 
-        <el-form-item prop="passwords" label="确认密码" class="item-form">
+        <el-form-item
+          prop="passwords"
+          v-show="loginType == 'register'"
+          label="确认密码"
+          class="item-form"
+        >
           <el-input type="password" v-model="form.passwords"></el-input>
         </el-form-item>
 
@@ -55,33 +60,28 @@
 </template>
 
 <script>
-import { stripScript, validateEmail } from "@/utils/validate";
+import { stripScript, validateEmail, validateCode } from "@/utils/validate";
+import { isRef, ref, reactive } from "@vue/reactivity";
+import { vModelDynamic } from "@vue/runtime-dom";
+
 export default {
-  name: "login",
-  components: {},
-  created() {},
-  methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    resetForm() {},
-    changeTab(data) {
-      this.menuTabs.forEach((eItem, index) => {
-        eItem.current = false;
-      });
-      data.current = true;
-    },
+  setup(props, context) {
+    function aaa() {
+      return {
+        a: 1,
+        b: 2,
+      }; 
+    }
+
+    let { a, b } = aaa();
+
+    console.log(a);
+
+    return {};
   },
+  name: "login",
   props: {},
   watch: {},
-  mounted() {},
   data() {
     var validateEmails = (rule, value, callback) => {
       if (value === "") {
@@ -111,17 +111,21 @@ export default {
         callback();
       }
     };
-    var validateCode = (rule, value, callback) => {
+    var validateCodes = (rule, value, callback) => {
       if (value === "") {
+        callback(new Error("请再次验证码"));
+      } else if (!validateCode(value)) {
+        callback(new Error("长度有误"));
+      } else {
+        callback();
       }
     };
-
     return {
       menuTabs: [
         { text: "登录", code: "login", current: true },
         { text: "注册", code: "register", current: false },
       ],
-      isActive: true,
+      loginType: "login",
       form: {
         username: "",
         password: "",
@@ -133,8 +137,14 @@ export default {
         email: [{ validator: validateEmails, trigger: "blur" }],
         password: [{ validator: validatePass, trigger: "blur" }],
         passwords: [{ validator: validatePass2, trigger: "blur" }],
+        code: [{ validator: validateCodes, trigger: "blur" }],
       },
     };
+  },
+  methods: {
+    changeTab: function (data) {
+      console.log("data");
+    }
   },
 };
 </script>

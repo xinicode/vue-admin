@@ -1,4 +1,8 @@
 const path = require('path');
+
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+const production = process.env.NODE_ENV === "production";
+
 module.exports = {
   // 基本路径
   publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
@@ -10,6 +14,8 @@ module.exports = {
    * webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
    **/
   chainWebpack: (config) => {
+    config.plugin("loadshReplace").use(new LodashModuleReplacementPlugin());
+    //生产环境才开启 不然开发时lodash函数不起作用 也不报错
   },
   configureWebpack: (config) => {
     config.resolve = { // 配置解析别名
