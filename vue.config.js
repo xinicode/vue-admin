@@ -63,7 +63,13 @@ module.exports = {
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false,
-    proxy: null, // 设置代理
+    proxy: {
+      '/': {
+        target: 'http://10.201.61.116',
+        changeOrigin: true,
+        // pathRewrite: { '^/': '' }
+      }
+    },
     overlay: { // 全屏模式下是否显示脚本错误
       warnings: true,
       errors: true

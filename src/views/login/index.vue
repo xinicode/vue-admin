@@ -53,6 +53,7 @@
           <el-button type="primary" @click="submitForm('ruleForm')"
             >立即创建</el-button
           >
+          <el-button type="primary" @click="tt()">创建</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -63,25 +64,21 @@
 import { stripScript, validateEmail, validateCode } from "@/utils/validate";
 import { isRef, ref, reactive } from "@vue/reactivity";
 import { vModelDynamic } from "@vue/runtime-dom";
+import { getCurrentInstance } from "vue";
+import { ElMessage } from "element-plus";
+import { defineComponent, h } from "vue";
 
-export default {
-  setup(props, context) {
-    function aaa() {
-      return {
-        a: 1,
-        b: 2,
-      }; 
-    }
+import api from "../../services/apiUrl";
 
-    let { a, b } = aaa();
-
-    console.log(a);
-
-    return {};
+export default defineComponent({
+  setup() {
+    return {
+      open() {
+        ElMessage("只是一条消息提示");
+      },
+    };
   },
   name: "login",
-  props: {},
-  watch: {},
   data() {
     var validateEmails = (rule, value, callback) => {
       if (value === "") {
@@ -144,9 +141,35 @@ export default {
   methods: {
     changeTab: function (data) {
       console.log("data");
-    }
+    },
+    submitForm() {
+      api
+        .postTest({
+          conStr: "iaas",
+          orderby: "orderNo",
+          page: 1,
+          page_size: 10,
+          params: { category: "base", serviceId: "" },
+          sqlId: "metro.getAllEnableServiceList",
+          total: true,
+        })
+        .then((rs) => {
+          console.log(rs);
+        });
+    },
+    tt() {
+      api
+        .queryList({
+          dateType: 1,
+          page: 1,
+          rows: 7,
+        })
+        .then((rs) => {
+          console.log(rs);
+        });
+    },
   },
-};
+});
 </script>
 <style lang="scss" scoped>
 #login {
