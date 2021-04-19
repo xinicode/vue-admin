@@ -65,7 +65,7 @@ module.exports = {
     hotOnly: false,
     proxy: {
       '/': {
-        target: 'http://10.201.61.116',
+        target: 'http://10.201.61.188/',
         changeOrigin: true,
         // pathRewrite: { '^/': '' }
       }

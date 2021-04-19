@@ -10,12 +10,12 @@ export function autoMatch (prefix) {
     // 生产环境 根据实际配置 根据 prefix 匹配url;
     // 配置来源 根据实际应用场景更改配置。(1.从全局读取；2.线上配置中心读取)
     switch (prefix) {
-      // case 'baidu':
-      //   baseUrl = window.LOCAL_CONFIG.baidu;
-      //   break;
-      // case 'alipay':
-      //   baseUrl = window.LOCAL_CONFIG.alipay;
-      //   break;
+      case 'baidu':
+        baseUrl = "gateway/";
+        break;
+      case 'alipay':
+        baseUrl = window.LOCAL_CONFIG.alipay;
+        break;
       default:
         baseUrl = window.LOCAL_CONFIG.default;
     }

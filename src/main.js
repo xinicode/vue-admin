@@ -6,11 +6,14 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+import http from './services/request'
+
+
 let app = createApp(App);
 
-// app.config.globalProperties.$service = service();
+app.config.globalProperties.$service = http;
 
-
+localStorage.setItem('token','Bearer bG9jYWw6MDIzMzc5ZDQtOWY1Yy00NDg4LTk1ZTMtMjE5NjQzODkyYzVj');
 
 
 app.use(store).use(router).use(ElementPlus, { locale }).mount("#app");

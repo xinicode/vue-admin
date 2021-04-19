@@ -72,6 +72,10 @@ import api from "../../services/apiUrl";
 
 export default defineComponent({
   setup() {
+    let { proxy } = getCurrentInstance();
+
+    console.log(proxy);
+
     return {
       open() {
         ElMessage("只是一条消息提示");
@@ -145,13 +149,7 @@ export default defineComponent({
     submitForm() {
       api
         .postTest({
-          conStr: "iaas",
-          orderby: "orderNo",
-          page: 1,
-          page_size: 10,
-          params: { category: "base", serviceId: "" },
-          sqlId: "metro.getAllEnableServiceList",
-          total: true,
+          custId: "11111111-11111111-11111111-11111111"
         })
         .then((rs) => {
           console.log(rs);
