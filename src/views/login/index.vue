@@ -146,25 +146,21 @@ export default defineComponent({
     changeTab: function (data) {
       console.log("data");
     },
-    submitForm() {
-      api
-        .postTest({
-          custId: "11111111-11111111-11111111-11111111"
-        })
-        .then((rs) => {
-          console.log(rs);
-        });
+    async submitForm() {
+      let param = {
+        custId: "11111111-11111111-11111111-11111111",
+      };
+      let data = await api.postTest(param);
+      console.log(data)
     },
-    tt() {
-      api
-        .queryList({
-          dateType: 1,
-          page: 1,
-          rows: 7,
-        })
-        .then((rs) => {
-          console.log(rs);
-        });
+    async tt() {
+      let params = {
+        dateType: 1,
+        page: 1,
+        rows: 7,
+      };
+      const res = await api.queryList(params);
+      console.log(res);
     },
   },
 });

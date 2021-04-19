@@ -1,60 +1,87 @@
-import Axios from "axios"; // 引入axios
-import { ElNotification, ElMessageBox } from 'element-plus';
-
+//引入axios
+import axios from 'axios';
+import { ElNotification } from 'element-plus';
 import { checkStatus } from './utils';
 
-const axios = Axios.create({
-  baseURL: "",
-  timeout: 10000
+axios.defaults.baseURL = ''
+axios.defaults.headers = {
+  'X-Requested-With': 'XMLHttpRequest'
+}
+axios.defaults.timeout = 10000;
+
+
+
+let cancel, promiseArr = {}
+const CancelToken = axios.CancelToken;
+axios.interceptors.request.use(config => {
+  if (promiseArr[config.url]) {
+    promiseArr[config.url]('操作取消')
+    promiseArr[config.url] = cancel
+  } else {
+    promiseArr[config.url] = cancel
+  }
+  config.headers = Object.assign(
+    {
+      Authorization: "Bearer bG9jYWw6MDIzMzc5ZDQtOWY1Yy00NDg4LTk1ZTMtMjE5NjQzODkyYzVj",
+    },
+    config.headers
+  );
+  return config
+}, error => {
+  return Promise.reject(error);
 })
 
-
-//添加请求拦截器
-
-axios.interceptors.request.use(
-  (config) => {
-    config.headers = Object.assign(
-      {
-        Authorization: "Bearer bG9jYWw6MDIzMzc5ZDQtOWY1Yy00NDg4LTk1ZTMtMjE5NjQzODkyYzVj",
-      },
-      config.headers
-    );
-    if (config.method.toLocaleLowerCase() === 'post') {
-      const contentType = config.headers["Content-Type"];
-      if (contentType) {
-
-      }
-      config.data = config.data.data;
-    } else if (config.method.toLocaleLowerCase() === 'get') {
-      config.params = config.data;
-    } else {
-      ElMessageBox.error("不允许请求方法", config.method);
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-)
-
-//添加响应拦截器
-
-axios.interceptors.response.use(
-  function (response) {
-    return Promise.resolve(checkStatus(response));
-  },
-  function (error) {
-    let errorStatus = checkStatus(error.response);
+//响应拦截器即异常处理
+axios.interceptors.response.use(response => {
+  return Promise.resolve(checkStatus(response));
+}, error => {
+  let errorStatus = checkStatus(error.response);
+  if (errorStatus) {
     ElNotification({
       title: '接口异常',
       message: errorStatus.msg,
       type: 'error'
     });
-    return Promise.reject(error)
+  } else {
+    ElNotification({
+      title: '接口异常',
+      message: "接口异常",
+      type: 'error'
+    });
   }
-)
 
-export default axios;
+  return Promise.reject(error)
+})
 
 
 
+export default {
+  get(url, param) {
+    return new Promise((resolve, reject) => {
+      axios({
+        method: 'get',
+        url,
+        params: param,
+        cancelToken: new CancelToken(c => {
+          cancel = c
+        })
+      }).then(res => {
+        resolve(res)
+      })
+    })
+  },
+  post(url, param) {
+    return new Promise((resolve, reject) => {
+      axios({
+        method: 'post',
+        url,
+        data: param,
+        cancelToken: new CancelToken(c => {
+          cancel = c
+        })
+      }).then(res => {
+        resolve(res)
+      })
+    })
+  }
+}

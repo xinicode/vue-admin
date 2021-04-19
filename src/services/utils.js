@@ -1,7 +1,7 @@
 const isDev = process.env.NODE_ENV === 'development'; // 开发 or 生产
 
 // 匹配接口前缀
-export function autoMatch (prefix) {
+export function autoMatch(prefix) {
   let baseUrl = '';
   if (isDev) {
     // 开发环境 通过proxy配置转发请求；
@@ -23,7 +23,8 @@ export function autoMatch (prefix) {
   return baseUrl;
 }
 
-export function checkStatus (response) {
+export function checkStatus(response) {
+  if (!response) return;
   const status = response.status || -1000; // -1000 自己定义，连接错误的status
   if ((status >= 200 && status < 300) || status === 304) {
     // 如果http状态码正常，则直接返回数据
