@@ -22,7 +22,7 @@ axios.interceptors.request.use(config => {
   }
   config.headers = Object.assign(
     {
-      Authorization: "Bearer bG9jYWw6MDIzMzc5ZDQtOWY1Yy00NDg4LTk1ZTMtMjE5NjQzODkyYzVj",
+      Authorization: "Bearer bG9jYWw6Yzg0OTc5YjUtMTBiNy00ZGFjLThlYWYtYTRjOTcxZWNjYjA5",
     },
     config.headers
   );

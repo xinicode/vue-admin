@@ -68,7 +68,7 @@ import { getCurrentInstance } from "vue";
 import { ElMessage } from "element-plus";
 import { defineComponent, h } from "vue";
 
-import api from "../../services/apiUrl";
+import login from "../../services/login";
 
 export default defineComponent({
   setup() {
@@ -150,7 +150,7 @@ export default defineComponent({
       let param = {
         custId: "11111111-11111111-11111111-11111111",
       };
-      let data = await api.postTest(param);
+      let data = await login.getSms(param);
       console.log(data)
     },
     async tt() {
@@ -159,7 +159,7 @@ export default defineComponent({
         page: 1,
         rows: 7,
       };
-      const res = await api.queryList(params);
+      const res = await login.loginIn(params);
       console.log(res);
     },
   },
