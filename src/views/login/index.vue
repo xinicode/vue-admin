@@ -56,6 +56,7 @@
           <el-button type="primary" @click="slA()" :disabled="loginBtn"
             >创建</el-button
           >
+          <el-button type="primary" @click="link()">创建1</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -222,6 +223,12 @@ export default defineComponent({
       const res = await login.loginIn(params);
       console.log(res);
     },
+    link() {
+      this.$router.push({
+        name: "console",
+        params: { id: 123 },
+      });
+    },
   },
 });
 </script>
@@ -232,6 +239,7 @@ export default defineComponent({
   color: #fff;
 }
 .login-wrap {
+  padding-top: 150px;
   width: 330px;
   margin: auto;
 }
