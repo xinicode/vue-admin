@@ -8,6 +8,7 @@ import store from "./store";
 
 import http from './services/request'
 
+// console.log(process.env.VUE_APP_ABC)
 
 let app = createApp(App);
 

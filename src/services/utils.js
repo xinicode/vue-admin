@@ -57,7 +57,7 @@ export function checkStatus(response) {
         errorInfo = '500：访问服务失败';
         break;
       case 501:
-        errorInfo = '501：未实现';
+        errorInfo = '501：服务不支持';
         break;
       case 502:
         errorInfo = '502：无效网关';

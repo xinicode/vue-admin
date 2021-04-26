@@ -44,16 +44,18 @@
               <el-input id="code" type="text" v-model="form.code"></el-input>
             </el-col>
             <el-col :span="9">
-              <el-button>获取验证码</el-button>
+              <el-button @click="getCode" :disabled="tt.status">{{
+                tt.text
+              }}</el-button>
             </el-col>
           </el-row>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >立即创建</el-button
+          <el-button type="primary" @click="getSms">立即创建</el-button>
+          <el-button type="primary" @click="slA()" :disabled="loginBtn"
+            >创建</el-button
           >
-          <el-button type="primary" @click="tt()">创建</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -64,27 +66,13 @@
 import { stripScript, validateEmail, validateCode } from "@/utils/validate";
 import { isRef, ref, reactive } from "@vue/reactivity";
 import { vModelDynamic } from "@vue/runtime-dom";
-import { getCurrentInstance } from "vue";
-import { ElMessage } from "element-plus";
 import { defineComponent, h } from "vue";
 
 import login from "../../services/login";
 
 export default defineComponent({
-  setup() {
-    let { proxy } = getCurrentInstance();
-
-    console.log(proxy);
-
-    return {
-      open() {
-        ElMessage("只是一条消息提示");
-      },
-    };
-  },
-  name: "login",
-  data() {
-    var validateEmails = (rule, value, callback) => {
+  setup(props) {
+    let validateEmails = (value, rule, callback) => {
       if (value === "") {
         callback(new Error("请输入邮箱地址"));
       } else if (!validateEmail(value)) {
@@ -93,7 +81,7 @@ export default defineComponent({
         callback();
       }
     };
-    var validatePass = (rule, value, callback) => {
+    let validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
@@ -103,7 +91,7 @@ export default defineComponent({
         callback();
       }
     };
-    var validatePass2 = (rule, value, callback) => {
+    let validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.form.password) {
@@ -112,7 +100,7 @@ export default defineComponent({
         callback();
       }
     };
-    var validateCodes = (rule, value, callback) => {
+    let validateCodes = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次验证码"));
       } else if (!validateCode(value)) {
@@ -121,6 +109,83 @@ export default defineComponent({
         callback();
       }
     };
+
+    let timer = ref(null);
+    const form = {
+      username: "",
+      password: "",
+      passwords: "",
+      code: "",
+      email: "",
+    };
+    const codeText = ref("获取验证码");
+    const getSms = () => {
+      if (form.email == "") {
+        this.$message.error("不能为空");
+      }
+      if (validateEmails(form.email)) {
+        this.$message.error("错误");
+        return fasle;
+      }
+      let param = {
+        custId: "11111111-11111111-11111111-11111111",
+      };
+      login.getSms(param).then((rs) => {
+        let datas = rs.data;
+        console.log(datas);
+      });
+    };
+
+    let tt = reactive({
+      text: "获取验证码",
+      status: false,
+    });
+
+    const getCode = () => {
+      tt.status = true;
+      countDown(6);
+    };
+
+    const countDown = (number) => {
+      if (timer.value) {
+        clearInterval(timer.value);
+      }
+      let time = number;
+
+      timer.value = setInterval(() => {
+        time--;
+
+        if (time < 1) {
+          tt.text = "重新获取";
+          tt.status = false;
+          clearInterval(timer.value);
+          return;
+        }
+        tt.text = time;
+      }, 500);
+    };
+
+    const clearCountDown = () => {
+      tt.status = false;
+      tt.text = "获取验证码";
+      clearInterval(timer.value);
+    };
+
+    const slA = () => {
+      clearCountDown();
+    };
+
+    return {
+      tt,
+      slA,
+      codeText,
+      getSms,
+      form,
+      getCode,
+    };
+  },
+  name: "login",
+  data() {
     return {
       menuTabs: [
         { text: "登录", code: "login", current: true },
@@ -134,12 +199,12 @@ export default defineComponent({
         code: "",
         email: "",
       },
-      rules: {
-        email: [{ validator: validateEmails, trigger: "blur" }],
-        password: [{ validator: validatePass, trigger: "blur" }],
-        passwords: [{ validator: validatePass2, trigger: "blur" }],
-        code: [{ validator: validateCodes, trigger: "blur" }],
-      },
+      // rules: {
+      //   email: [{ validator: validateEmails, trigger: "blur" }],
+      //   password: [{ validator: validatePass, trigger: "blur" }],
+      //   passwords: [{ validator: validatePass2, trigger: "blur" }],
+      //   code: [{ validator: validateCodes, trigger: "blur" }],
+      // },
     };
   },
   methods: {
@@ -147,11 +212,12 @@ export default defineComponent({
       console.log("data");
     },
     async submitForm() {
-      let param = {
-        custId: "11111111-11111111-11111111-11111111",
-      };
-      let data = await login.getSms(param);
-      console.log(data)
+      this.$message.error("aaaa");
+      // let param = {
+      //   custId: "11111111-11111111-11111111-11111111",
+      // };
+      // let data = await login.getSms(param);
+      // console.log(data);
     },
     async tt() {
       let params = {
