@@ -14,6 +14,8 @@ axios.defaults.timeout = 10000;
 let cancel, promiseArr = {}
 const CancelToken = axios.CancelToken;
 axios.interceptors.request.use(config => {
+
+  console.log(config)
   if (promiseArr[config.url]) {
     promiseArr[config.url]('操作取消')
     promiseArr[config.url] = cancel
@@ -22,7 +24,7 @@ axios.interceptors.request.use(config => {
   }
   config.headers = Object.assign(
     {
-      Authorization: "Bearer bG9jYWw6Yzg0OTc5YjUtMTBiNy00ZGFjLThlYWYtYTRjOTcxZWNjYjA5",
+      Authorization: "Bearer bG9jYWw6ODBhMzNiMjAtNGRjMS00OTczLWIwMjItODVmZGM4MGNmNzVl",
     },
     config.headers
   );

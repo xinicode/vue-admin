@@ -52,7 +52,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="getSms">立即创建</el-button>
+          <el-button type="primary" @click="ttt()">立即创建</el-button>
           <el-button type="primary" @click="slA()" :disabled="loginBtn"
             >创建</el-button
           >
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import sha1 from "js-sha1";
 import { stripScript, validateEmail, validateCode } from "@/utils/validate";
 import { isRef, ref, reactive } from "@vue/reactivity";
 import { vModelDynamic } from "@vue/runtime-dom";
@@ -111,13 +112,7 @@ export default defineComponent({
     };
 
     let timer = ref(null);
-    const form = {
-      username: "",
-      password: "",
-      passwords: "",
-      code: "",
-      email: "",
-    };
+
     const codeText = ref("获取验证码");
     const getSms = () => {
       if (form.email == "") {
@@ -180,7 +175,6 @@ export default defineComponent({
       slA,
       codeText,
       getSms,
-      form,
       getCode,
     };
   },
@@ -219,7 +213,7 @@ export default defineComponent({
       // let data = await login.getSms(param);
       // console.log(data);
     },
-    async tt() {
+    async ttt() {
       let params = {
         dateType: 1,
         page: 1,
