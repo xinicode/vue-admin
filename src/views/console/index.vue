@@ -1,8 +1,6 @@
 <template>
   <div>
-    123
-
-    <el-button @click="goback">返回</el-button>
+     aaa
   </div>
 </template>
 
@@ -10,21 +8,18 @@
 import { isRef, ref, reactive } from "@vue/reactivity";
 import { vModelDynamic } from "@vue/runtime-dom";
 import { defineComponent, h } from "vue";
-
 import login from "../../services/login";
-
 export default defineComponent({
   name: "console",
-  setup(props) {
-    console.log(props);
+  setup(props,context) {
 
+  
 
     return {
       
     };
   },
   created() {
-    console.log(this.$route);
   },
   data() {
     return {

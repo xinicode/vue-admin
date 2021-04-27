@@ -69,7 +69,7 @@ import { stripScript, validateEmail, validateCode } from "@/utils/validate";
 import { isRef, ref, reactive } from "@vue/reactivity";
 import { vModelDynamic } from "@vue/runtime-dom";
 import { defineComponent, h } from "vue";
-
+import _ from 'lodash';
 import login from "../../services/login";
 
 export default defineComponent({
@@ -204,7 +204,11 @@ export default defineComponent({
   },
   methods: {
     changeTab: function (data) {
-      console.log("data");
+      _.forEach(this.menuTabs,(item)=>{
+        item.current = false;
+      })
+      data.current = true;
+      this.loginType = data.code;
     },
     async submitForm() {
       this.$message.error("aaaa");
